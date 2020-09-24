@@ -1,14 +1,16 @@
 import cv2
+import os
 import numpy as np
 from PIL import Image
-import hashlib
-import os
 
+# Using IP webcam
 import urllib.request
 import time
-url = 'http://10.0.1.107:8080/shot.jpg'
 
-path = "char"
+
+url = 'http://10.0.1.107:8080/shot.jpg' # Insert Ip for webcam
+
+path = input("Enter the file path to the character dataset: ")
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 faceCascade = cv2.CascadeClassifier('lbpcascade_animeface.xml')
 
@@ -25,10 +27,8 @@ def getImagesAndLabels(path):
 
     for charImages in charFolderPath:
         imagePaths = [os.path.join(charImages,img) for img in os.listdir(charImages)]
-        print(imagePaths)
         for imagePath in imagePaths:
-            print(imagePath) #REMOVE REDUNCY
-
+            #store images directly
             charName = os.path.basename(os.path.dirname(imagePath))
             id = charId[charName]
             image = cv2.imread(imagePath, cv2.IMREAD_COLOR)

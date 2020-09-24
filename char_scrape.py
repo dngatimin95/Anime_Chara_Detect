@@ -15,7 +15,7 @@ def find_img(char_name, num_of_img):
     driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.set_window_size(1120, 1000)
 
-    url = "https://www.google.com/search?safe=off&site=&tbm=isch&source=hp&q="+character+"&oq="+character+"&gs_l=img"
+    url = "https://www.google.com/search?safe=off&site=&tbm=isch&source=hp&q="+char_name+"&oq="+char_name+"&gs_l=img"
     driver.get(url)
 
     def scroll_down(driver):
@@ -24,16 +24,16 @@ def find_img(char_name, num_of_img):
 
     img_urls = set()
     img_count = 0
-    results_start = 0
+    res_count = 0
     while img_count < num_of_img:
         scroll_down(driver)
 
-        thumbnail_results = driver.find_elements_by_css_selector("img.Q4LuWd")
-        num_results = len(thumbnail_results)
+        char_found = driver.find_elements_by_css_selector("img.Q4LuWd")
+        num_found = len(char_found)
 
-        print(f"Found: {num_results} search results. Extracting links from {results_start}:{num_results}")
+        print(f"Found: {num_found} search results. Extracting links from {res_count}:{num_found}")
 
-        for img in thumbnail_results[results_start:num_results]:
+        for img in char_found[res_count:num_found]:
             try:
                 img.click()
                 time.sleep(1)
@@ -41,9 +41,9 @@ def find_img(char_name, num_of_img):
                 continue
 
             actual_img = driver.find_elements_by_css_selector('img.n3VNCb')
-            for actual_image in actual_img:
-                if actual_image.get_attribute('src') and 'http' in actual_image.get_attribute('src'):
-                    img_urls.add(actual_image.get_attribute('src'))
+            for image in actual_img:
+                if image.get_attribute('src') and 'http' in image.get_attribute('src'):
+                    img_urls.add(image.get_attribute('src'))
 
             img_count = len(img_urls)
 
@@ -54,11 +54,11 @@ def find_img(char_name, num_of_img):
             print("Found:", len(img_urls), "image links, looking for more ...")
             time.sleep(30)
             return
-            load_more_button = driver.find_element_by_css_selector(".mye4qd")
-            if load_more_button:
+            next_page = driver.find_element_by_css_selector(".mye4qd")
+            if next_page:
                 driver.execute_script("document.querySelector('.mye4qd').click();")
 
-        results_start = len(thumbnail_results)
+        res_count = len(char_found)
     return img_urls
 
 def start():
