@@ -2,6 +2,7 @@ import cv2
 import os
 import numpy as np
 from PIL import Image
+from numpy import asarray
 
 # Using IP webcam
 import urllib.request
@@ -14,39 +15,29 @@ recognizer = cv2.face.LBPHFaceRecognizer_create()
 face_cascade = cv2.CascadeClassifier('lbpcascade_animeface.xml')
 
 def get_char(file_path):
-    char_folder_path, char_face = [], []
-    ids = set()
+    char_folder_path, char_face, ids, char_dic = [], [], [], {}
     char_id = 1
-    char_dic = {}
 
     for char_folder in os.listdir(file_path):
         char_dic[char_folder] = char_id
-        char_folder_path.append(os.path.join(file_path,char_folder))
         char_id += 1
-
-    for char_imgs in char_folder_path:
-        all_img_paths = [os.path.join(char_imgs, img) for img in os.listdir(char_imgs)]
-        for img_path in all_img_paths:
-            char_name = os.path.basename(os.path.dirname(img_path))
+        char_folder_path = os.path.join(file_path,char_folder)
+        for char_imgs in os.listdir(char_folder_path):
+            img_path = os.path.join(char_folder_path, char_imgs)
+            char_name = os.path.basename(char_folder)
             id = char_dic[char_name]
-            image = cv2.imread(img_path, cv2.IMREAD_COLOR)
-            if image is not None:
-                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                gray = cv2.equalizeHist(gray)
-                faces = face_cascade.detectMultiScale(gray, scaleFactor = 1.2, minNeighbors = 5, minSize = (30, 30))
-                for (x, y, w, h) in faces:
-                    crop_img = gray[y:y+h, x:x+w]
-                    resized_image = cv2.resize(crop_img, (100, 100), interpolation=cv2.INTER_AREA)
-                    char_face.append(resized_image)
-                    print(id)
-                    ids.append(id)
-                    # SHOULD BE BETTER TO SCRAPE AND CROP TO LIMIT SIZE OF FILES
-    return char_face, ids, char_dic
-
+            #image = Image.open(img_path).convert('L')
+            #image_arr = asarray(image)
+            image = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+            #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            #gray = cv2.equalizeHist(gray)
+            char_face.append(np.array(image, dtype=np.uint8))
+            ids.append(id)
+    return char_face, np.array(ids), char_dic
 
 print ("\n [INFO] Training faces. This will take a few seconds. Wait...")
 faces, ids, char_dic = get_char(file_path)
-recognizer.train(faces, np.array(ids))
+recognizer.train(faces, ids)
 recognizer.save('trainer.yml')
 print("\n [INFO] {0} faces trained. Exiting Program".format(len(np.unique(ids))))
 
@@ -54,7 +45,6 @@ recognizer.read('trainer.yml')
 font = cv2.FONT_HERSHEY_DUPLEX
 #capture = cv2.VideoCapture(0) #Uncomment if using computer camera
 
-#id = 0
 names = list(char_dic.keys())
 names.insert(0, "None")
 
@@ -70,7 +60,7 @@ while True:
     #ret, frame = capture.read() #Reading from computer webcam
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
-    faces = faceCascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(30,30))#int(minW), int(minH)))
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(30,30))#int(minW), int(minH)))
 
     for(x,y,w,h) in faces:
         cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), 2)
