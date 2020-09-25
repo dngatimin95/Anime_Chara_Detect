@@ -64,10 +64,10 @@ def find_img(char_name, num_of_img):
 def start():
     char_name = input("Enter the search term/character you want to find: ")
     file_path = input("Enter the file path where you want it saved: ")
-    num_of_img = input("Enter the number of images you want to scrape: ")
+    num_of_img = input("Enter the number of images you want to scrape (40 recommended): ")
     scrape(char_name.strip().lower(), file_path, int(num_of_img))
 
-def scrape(char_name, file_path, num_of_img=10):
+def scrape(char_name, file_path, num_of_img=40):
     char_folder = os.path.join(file_path,'_'.join(char_name.lower().split(' ')))
     if not os.path.exists(char_folder):
         os.makedirs(char_folder)
