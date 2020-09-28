@@ -12,6 +12,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def find_img(char_name, num_of_img):
     options = webdriver.ChromeOptions()
+    #options.add_argument('headless')
     driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.set_window_size(1120, 1000)
 
