@@ -13,7 +13,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 def find_img(char_name, num_of_img):
     options = webdriver.ChromeOptions()
     #options.add_argument('headless')
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options = options)
     driver.set_window_size(1120, 1000)
 
     url = "https://www.google.com/search?safe=off&site=&tbm=isch&source=hp&q="+char_name+"&oq="+char_name+"&gs_l=img"
