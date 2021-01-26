@@ -2,7 +2,7 @@
 
 
 ## What does this repo do?
-As you may have already noticed, there are three parts to this repo. The first script that users should run is  (to be continued)
+This repo detects anime characters in real time and predicts the name of the characters based on a dataset that users have scraped on the Internet. The idea behind this project was to implement an app that allows users to recognize certain anime characters while they are out and about. The dataset would be shared with tons of other users so that the app will be able to recognize more characters than just what the user have inputted. I built this program because with tons of new anime coming out each season, the number of characters increase exponentially. However, I can't possibly watch all the animes and I might be interested in animes with cool or cute characters. Thus, users can use this app to detect characters that catch their interest and find out which anime they come from.
 
 ## So how do I run this?
-
+As you may have already noticed, there are three parts to this repo. Users should download the entire file first before doing anything. The first script that users should run is char_scrape.py which asks the user the character name to scrape from Google Images, how many images to scrape, etc. The next script to run is char_crop.py which detects the faces of the character in the scrapped images and crops them so that only their faces are shown. At this point a sort of dataset has formed. However, some cleaning might help make the model detect the anime characters more accurately. (Make sure that no other characters  or duplicate images are included in the dataset). Finally to run the program, just run char_detect.py and ensure that your webcam is on. (If you want to use your phone, you can use a webcam camera) (to be continued)
