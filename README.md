@@ -1,4 +1,4 @@
-# Anime Detect
+# Anime Character Detect
 
 
 ## What does this repo do?
