@@ -1,4 +1,4 @@
-# Waifu/Husbando Detect
+# Anime Detect
 
 
 ## What does this repo do?
